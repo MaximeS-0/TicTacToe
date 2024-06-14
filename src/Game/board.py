@@ -16,7 +16,10 @@ class board():
         return self._board
     
     def addValue(self, row:int, column:int, value:str) -> bool:
-        if self._board[row][column] != None:
+        if row > len(self._board) or column > len(self._board[0]):
+            return False
+
+        if self._board[row][column] == None:
             self._board[row][column] = value
             return True
         return False
