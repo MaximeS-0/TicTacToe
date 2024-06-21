@@ -30,67 +30,102 @@ class board():
         return False
 
     def gameState(self) -> int:
-        #Check row
+
+        if (
+            self._checkingRows() == board.GAMESTATE_PLAYER1_WIN or
+            self._checkingColumns() == board.GAMESTATE_PLAYER1_WIN or
+            self._checkingDiagonals() == board.GAMESTATE_PLAYER1_WIN
+        ):
+            print("Player 1 win!")
+            return board.GAMESTATE_PLAYER1_WIN
+        
+        elif(
+            self._checkingRows() == board.GAMESTATE_PLAYER2_WIN or
+            self._checkingColumns() == board.GAMESTATE_PLAYER2_WIN or
+            self._checkingDiagonals() == board.GAMESTATE_PLAYER2_WIN
+        ):
+            print("Player 2 win!")
+            return board.GAMESTATE_PLAYER2_WIN
+
+        elif(self._isTie()):
+            print("It is a tie!")
+            return board.GAMESTATE_TIE
+
+        else:
+            return board.GAMESTATE_IN_PROGRESS
+
+
+
+    def _checkingRows(self) -> int:
+
         for row in range(len(self._board)):
-            value = self._board[row][0]
+            winner = self._board[row][0]
 
             for column in range(len(self._board[0])):
-                if (self._board[row][column] != value): #If there is a different value, there can't be a winner
+                if (self._board[row][column] != winner): #If there is a different value, the row doesn't have a winner
+                    winner = None
                     break
-                else:  #If it is always the same value, it could be all None, or 1 player has win the game
-                    if value == 1:
-                        return board.GAMESTATE_PLAYER1_WIN
-                    elif value == 2:
-                        return board.GAMESTATE_PLAYER2_WIN
-                    
-                    #If all None, we continue
-    
-        #Check column
+            
+            #If winner is not None, there is winner
+            if winner == 1:
+                return board.GAMESTATE_PLAYER1_WIN
+            elif winner == 2:
+                return board.GAMESTATE_PLAYER2_WIN
+        
+        return None
+
+    def _checkingColumns(self) -> int:
+            
         for column in range(len(self._board[0])):
-            value = self._board[0][column]
+            winner = self._board[0][column]
 
             for row in range(len(self._board)):
-                if (self._board[row][column] != value): #If there is a different value, there can't be a winner
+                if (self._board[row][column] != winner): #If there is a different value, there can't be a winner
+                    winner = None
                     break
-                else:  #If it is always the same value, it could be all None, or 1 player has win the game
-                    if value == 1:
-                        return board.GAMESTATE_PLAYER1_WIN
-                    elif value == 2:
-                        return board.GAMESTATE_PLAYER2_WIN
-                    
-                    #If all None, we continue
+            
+            #If it is always the same value, it could be all None, or 1 player has win the game
+            if winner == 1:
+                return board.GAMESTATE_PLAYER1_WIN
+            elif winner == 2:
+                return board.GAMESTATE_PLAYER2_WIN
+            
+        return None
 
-        #Chek diagonal
+    def _checkingDiagonals(self) -> int:
+
         #First diagonal [(0,0) (1,1) (2,2)]
-        value = self._board[0][0]
+        winner = self._board[0][0]
         for i in range(len(self._board)):
-            if (self._board[i][i] != value): #If there is a different value, there can't be a winner
-                    break
-            else:  #If it is always the same value, it could be all None, or 1 player has win the game
-                if value == 1:
-                    return board.GAMESTATE_PLAYER1_WIN
-                elif value == 2:
-                    return board.GAMESTATE_PLAYER2_WIN
-                    
-                    #If all None, we continue
+            if (self._board[i][i] != winner): #If there is a different value, there can't be a winner
+                    winner = None
+            
+        #If it is always the same value, it could be all None, or 1 player has win the game
+        if winner == 1:
+            return board.GAMESTATE_PLAYER1_WIN
+        elif winner == 2:
+            return board.GAMESTATE_PLAYER2_WIN
+                
 
         #Second diagonal [(2,0) (1,1) (0,2)]
-        value = self._board[2][0]
+        winner = self._board[2][0]
         for i in range(len(self._board)):
-            if (self._board[i][len(self._board[0])-1 - i] != value): #If there is a different value, there can't be a winner
-                    break
-            else:  #If it is always the same value, it could be all None, or 1 player has win the game
-                if value == 1:
-                    return board.GAMESTATE_PLAYER1_WIN
-                elif value == 2:
-                    return board.GAMESTATE_PLAYER2_WIN
-                    
-                    #If all None, we continue
+            if (self._board[i][len(self._board[0])-1 - i] != winner): #If there is a different value, there can't be a winner
+                    winner = None
 
+        #If it is always the same value, it could be all None, or 1 player has win the game
+        if winner == 1:
+            return board.GAMESTATE_PLAYER1_WIN
+        elif winner == 2:
+            return board.GAMESTATE_PLAYER2_WIN
+                    
+        return None
+    
+    def _isTie(self) -> int:
         #Check tie
         for row in range(len(self._board)):
             for column in range(len(self._board[0])):
-                if self._board[row][column] == None:
-                    return board.GAMESTATE_IN_PROGRESS
-        
-        return board.GAMESTATE_TIE
+                if self._board[row][column] is None:
+                    return False
+                
+        return True
