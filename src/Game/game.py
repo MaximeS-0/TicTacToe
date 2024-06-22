@@ -1,5 +1,5 @@
-from board import board
-from player import player
+from Game.board import board
+from Game.player import player
 
 class game():
     def __init__(self):
@@ -9,14 +9,34 @@ class game():
 
         self.playerList = [self.player1, self.player2]
 
-    def playTurn(self):
-        self._playMove(self.player1)
-        self._isGameCompleted()
+    def playGame(self):
+        nbTurn = 0
+        while (not self._isGameCompleted()):
+            self._playTurn(self.playerList[nbTurn % len(self.playerList)])
+            nbTurn += 1
+        
+        if (self.boardGame.gameState() == board.GAMESTATE_TIE):
+            print("The game is a tie")
+        else:
+            print("The winner is : Player " + str(self.playerList[(nbTurn - 1) % 2].playerNumber))
+
+    def _playTurn(self, activePlayer: player):
+        print("Player " + str(activePlayer.playerNumber) + " , your turn to play.")
+        print(self.boardGame)
+        self._playMove(activePlayer)
+
 
 
     def _playMove(self, activePlayer: player):
-        (row, col) = activePlayer.makeMove()
+        moveInvalid = True
+        while(moveInvalid):
+            (row, col) = activePlayer.makeMove()
+            moveInvalid = not self.boardGame.addValue(row, col, activePlayer.playerNumber)
+
+            if (moveInvalid):
+                print("Your move is invalid, play something else.")
+
         
     def _isGameCompleted(self):
-        pass
+        return self.boardGame.gameState() != board.GAMESTATE_IN_PROGRESS
 

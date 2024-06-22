@@ -1,9 +1,6 @@
-from board.board import board
+from Game.game import game
 
 print("Hello world")
 
-game = board()
-game.addValue(1,0,"x")
-
-print(game.boardState)
-print (game)
+currentGame = game()
+currentGame.playGame()

@@ -8,8 +8,10 @@ class player():
         return self._number
 
     def makeMove(self) -> tuple:
-        row, col = input("Enter your move: ").split()
-        print("Your move is: " + row + " - " + col)
+        row_str, col_str = input("Enter your move: ").split()
+        row = int(row_str)
+        col = int(col_str)
+        print("Your move is: " + str(row) + " - " + str(col))
 
         return (row, col)
     
