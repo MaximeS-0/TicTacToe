@@ -1,5 +1,5 @@
 from Game.board import board
-from Game.player import player
+from Game.Player.humanPlayer import player
 
 class game():
     def __init__(self):
@@ -30,8 +30,11 @@ class game():
     def _playMove(self, activePlayer: player):
         moveInvalid = True
         while(moveInvalid):
-            (row, col) = activePlayer.makeMove()
-            moveInvalid = not self.boardGame.addValue(row, col, activePlayer.playerNumber)
+
+            (isInputValid, row, col) = activePlayer.makeMove()
+
+            if(isInputValid):
+                moveInvalid = not self.boardGame.addValue(row, col, activePlayer.playerNumber)
 
             if (moveInvalid):
                 print("Your move is invalid, play something else.")
