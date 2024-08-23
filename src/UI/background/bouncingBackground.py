@@ -3,6 +3,7 @@ import random
 from UI.background.background import Background
 
 class BouncingBackground(Background):
+    
     def __init__(self, imageFile, bouncingSpeed, screenDimension):
         super().__init__(imageFile, screenDimension)
 
@@ -17,6 +18,10 @@ class BouncingBackground(Background):
         self.frameRate = 60
 
 
+    def show(self, surface):
+        self.UpdateCoords() #Move the background
+        super().show(surface) #Show the background
+
     def UpdateCoords(self):
         time = self.clock.tick(self.frameRate)/1000.0
 
@@ -26,7 +31,7 @@ class BouncingBackground(Background):
         self.coord[0] += distance_x
         self.coord[1] += distance_y
 
-        changeOfSpeed = random.uniform(0.5, 2)
+        changeOfSpeed = random.uniform(0.8, 1.2)
 
         if self.coord[0] >= 0:
             self.coord[0] = 0
